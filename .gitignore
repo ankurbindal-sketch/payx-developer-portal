@@ -1,0 +1,20 @@
+/node_modules
+/build
+/.docusaurus
+/.cache-loader
+.DS_Store
+*.log
+.env.local
+
+# ---------------------------------------------------------------------------
+# Internal material. This repository is PUBLIC.
+#
+# The authoritative PAYX source export contains recovered internal commentary,
+# intentionally hidden API contracts and original personal data in examples.
+# The generator and audit trail derive from it. None of it may be committed
+# here; it lives in the separate internal source/audit package.
+# ---------------------------------------------------------------------------
+/source/
+/tools/
+/internal-audit/
+/COMPLETENESS_REPORT.md
