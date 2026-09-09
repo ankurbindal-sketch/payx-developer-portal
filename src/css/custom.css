@@ -1,0 +1,1593 @@
+/**
+ * PAYX Developer Portal — design system
+ * ---------------------------------------------------------------------------
+ * A restrained enterprise-fintech system: light neutral surfaces, charcoal-navy
+ * text, hairline borders, and the official PAYX orange used sparingly as the
+ * single accent (links, active navigation, the endpoint rule, card and flow
+ * markers). Method badges are the only other hues and stay desaturated so a
+ * page of API tables reads as data, not decoration.
+ *
+ * Palette is taken from the official PAYX logo: orange #FF9000, grey #7D7D7D.
+ * Interactive text uses a darkened orange (--payx-orange-ink) so it clears
+ * WCAG AA on white; dark mode lightens it for the same reason.
+ *
+ * Structure:
+ *   1. Tokens
+ *   2. Base typography and rhythm
+ *   3. Navbar
+ *   4. Sidebar
+ *   5. Table of contents
+ *   6. API reference components (badges, endpoint blocks, tables, code)
+ *   7. Admonitions
+ *   8. Cards and integration flow
+ *   9. Landing page
+ *  10. Responsive
+ */
+
+/* ========================================================================== */
+/* 1. Tokens                                                                  */
+/* ========================================================================== */
+
+:root {
+  /* brand */
+  --payx-orange: #ec8404;
+  --payx-orange-ink: #a35b02;
+  --payx-orange-wash: #fff6ea;
+  --payx-grey: #555555;
+
+  /* neutrals */
+  --payx-ink: #10151c;
+  --payx-ink-2: #33404f;
+  --payx-ink-3: #5a6470;
+  --payx-hairline: #e3e6ea;
+  --payx-hairline-strong: #ccd2d9;
+  --payx-surface: #f7f8f9;
+  --payx-surface-2: #fbfcfc;
+
+  /* method hues, desaturated */
+  --payx-get: #0e6e62;
+  --payx-get-wash: #eaf5f3;
+  --payx-post: #2a4b8d;
+  --payx-post-wash: #edf1f9;
+  --payx-put: #8a6100;
+  --payx-put-wash: #fbf4e6;
+  --payx-del: #9b2c2c;
+  --payx-del-wash: #fbeeee;
+
+  /* spacing scale */
+  --payx-space-1: 0.25rem;
+  --payx-space-2: 0.5rem;
+  --payx-space-3: 0.75rem;
+  --payx-space-4: 1rem;
+  --payx-space-5: 1.5rem;
+  --payx-space-6: 2rem;
+  --payx-space-7: 3rem;
+  --payx-radius: 8px;
+  --payx-radius-sm: 5px;
+
+  /* Infima overrides */
+  --ifm-color-primary: #a35b02;
+  --ifm-color-primary-dark: #8f5002;
+  --ifm-color-primary-darker: #7a4402;
+  --ifm-color-primary-darkest: #5f3502;
+  --ifm-color-primary-light: #cf7403;
+  --ifm-color-primary-lighter: #e07d03;
+  --ifm-color-primary-lightest: #ec8404;
+  --ifm-link-color: var(--payx-orange-ink);
+  --ifm-link-hover-color: #7a4402;
+
+  --ifm-font-family-base: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
+  --ifm-font-family-monospace: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo,
+    Consolas, monospace;
+
+  --ifm-font-size-base: 16px;
+  --ifm-line-height-base: 1.7;
+  --ifm-heading-font-weight: 600;
+  --ifm-heading-color: var(--payx-ink);
+  --ifm-font-color-base: var(--payx-ink-2);
+  --ifm-code-font-size: 87.5%;
+  --ifm-code-background: var(--payx-surface);
+  --ifm-code-border-radius: 4px;
+
+  --ifm-toc-border-color: var(--payx-hairline);
+  --ifm-table-border-color: var(--payx-hairline);
+  --ifm-table-head-background: var(--payx-surface);
+  --ifm-table-stripe-background: var(--payx-surface-2);
+  --ifm-table-cell-padding: 0.6rem 0.8rem;
+
+  --ifm-navbar-height: 3.75rem;
+  --ifm-navbar-background-color: #ffffff;
+  --ifm-navbar-shadow: inset 0 -1px 0 var(--payx-hairline);
+  --ifm-navbar-link-color: var(--payx-ink-2);
+  --ifm-navbar-link-hover-color: var(--payx-ink);
+  --ifm-menu-color: var(--payx-ink-2);
+  --ifm-menu-color-background-active: transparent;
+  --ifm-menu-color-background-hover: var(--payx-surface);
+
+  --ifm-breadcrumb-size-multiplier: 0.9;
+  --ifm-breadcrumb-item-background-active: var(--payx-surface);
+  --ifm-global-shadow-lw: none;
+  --ifm-global-shadow-md: none;
+  --docusaurus-highlighted-code-line-bg: var(--payx-orange-wash);
+}
+
+[data-theme='dark'] {
+  --payx-orange-ink: #f4a344;
+  --payx-orange-wash: #241a0c;
+
+  --payx-ink: #eef2f6;
+  --payx-ink-2: #c3ccd6;
+  --payx-ink-3: #93a1af;
+  --payx-hairline: #262d35;
+  --payx-hairline-strong: #38424d;
+  --payx-surface: #161b21;
+  --payx-surface-2: #12171c;
+
+  --payx-get: #58c3b4;
+  --payx-get-wash: #10231f;
+  --payx-post: #8db2f0;
+  --payx-post-wash: #131c2b;
+  --payx-put: #d7a54a;
+  --payx-put-wash: #231b0d;
+  --payx-del: #e2909a;
+  --payx-del-wash: #251317;
+
+  --ifm-color-primary: #f4a344;
+  --ifm-color-primary-dark: #ff9a1a;
+  --ifm-color-primary-darker: #f08e00;
+  --ifm-color-primary-darkest: #cc7800;
+  --ifm-color-primary-light: #ffb85c;
+  --ifm-color-primary-lighter: #ffc78a;
+  --ifm-color-primary-lightest: #ffd9a3;
+  --ifm-link-color: var(--payx-orange-ink);
+  --ifm-link-hover-color: #ffc06b;
+
+  --ifm-background-color: #0e1216;
+  --ifm-background-surface-color: #161b21;
+  --ifm-heading-color: var(--payx-ink);
+  --ifm-font-color-base: var(--payx-ink-2);
+  --ifm-navbar-background-color: #0e1216;
+  --ifm-table-head-background: #161b21;
+  --ifm-table-stripe-background: #12171c;
+  --ifm-code-background: #161b21;
+  --ifm-menu-color: var(--payx-ink-2);
+  --ifm-menu-color-background-hover: #161b21;
+  --docusaurus-highlighted-code-line-bg: #26313d;
+}
+
+/* ========================================================================== */
+/* 2. Base typography and rhythm                                              */
+/* ========================================================================== */
+
+article h1 {
+  font-size: 2rem;
+  line-height: 1.18;
+  letter-spacing: -0.022em;
+  margin-bottom: var(--payx-space-4);
+}
+
+article h2 {
+  font-size: 1.3rem;
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+  margin-top: var(--payx-space-7);
+  padding-bottom: var(--payx-space-2);
+  border-bottom: 1px solid var(--payx-hairline);
+}
+
+article h3 {
+  font-size: 1.05rem;
+  letter-spacing: -0.005em;
+  margin-top: var(--payx-space-6);
+}
+
+article h4 {
+  font-size: 0.95rem;
+  margin-top: var(--payx-space-5);
+}
+
+.markdown > p,
+.markdown > ul,
+.markdown > ol {
+  max-width: 78ch;
+  overflow-wrap: break-word;
+}
+
+/* A long inline path or URL wraps rather than stretching the column. Scoped to
+ * prose: applying `anywhere` to table cells let short tokens such as a POST
+ * badge break mid-word when a column was narrow. */
+.markdown p code,
+.markdown li code {
+  overflow-wrap: anywhere;
+}
+
+.markdown li + li {
+  margin-top: 0.2rem;
+}
+
+.markdown strong {
+  color: var(--payx-ink);
+  font-weight: 600;
+}
+
+.theme-doc-markdown a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+/* ========================================================================== */
+/* 3. Navbar                                                                  */
+/* ========================================================================== */
+
+.navbar {
+  padding-inline: var(--payx-space-4);
+}
+
+.navbar__inner {
+  align-items: center;
+}
+
+.navbar__brand {
+  align-items: center;
+  margin-right: var(--payx-space-6);
+}
+
+/* Fixed height, automatic width: the official 703x186 asset is never distorted. */
+.navbar__logo {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  margin-right: var(--payx-space-3);
+}
+
+.navbar__logo img {
+  height: 32px;
+  width: auto;
+  max-width: none;
+}
+
+/* Dark mode: the official wordmark is a transparent PNG whose text is #555555,
+ * which nearly disappears on a dark navbar. The source image and the brand
+ * colours are not touched. Instead the mark sits on a light plate, so the
+ * artwork renders exactly as supplied and simply gains a background.
+ * Same treatment for the hero mark below. */
+[data-theme='dark'] .navbar__logo img,
+[data-theme='dark'] .payx-hero__logo {
+  background: #ffffff;
+  border-radius: var(--payx-radius-sm);
+  padding: 3px 6px;
+  box-sizing: content-box;
+}
+
+.navbar__title {
+  font-size: 0.94rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--payx-ink);
+  padding-left: var(--payx-space-3);
+  border-left: 1px solid var(--payx-hairline-strong);
+  line-height: 1.2;
+}
+
+.navbar__link {
+  font-size: 0.92rem;
+  font-weight: 500;
+  padding-inline: var(--payx-space-3);
+}
+
+.navbar__link--active {
+  color: var(--payx-ink);
+  font-weight: 600;
+}
+
+.navbar__items--right > * {
+  margin-left: var(--payx-space-2);
+}
+
+/* ========================================================================== */
+/* 4. Sidebar                                                                 */
+/* ========================================================================== */
+
+.theme-doc-sidebar-container {
+  border-right: 1px solid var(--payx-hairline) !important;
+}
+
+.menu {
+  padding: var(--payx-space-5) var(--payx-space-4) var(--payx-space-7) !important;
+  font-size: 0.9rem;
+}
+
+.menu__list .menu__list {
+  margin-top: var(--payx-space-1);
+  padding-left: var(--payx-space-3);
+  border-left: 1px solid var(--payx-hairline);
+}
+
+.menu__list-item {
+  margin-top: 1px;
+}
+
+.menu__link {
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--payx-radius-sm);
+  line-height: 1.4;
+}
+
+/* top-level categories read as section labels, children as items */
+.menu > .menu__list > .menu__list-item > .menu__list-item-collapsible > .menu__link,
+.menu > .menu__list > .menu__list-item > .menu__link {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--payx-ink-3);
+}
+
+.menu > .menu__list > .menu__list-item {
+  margin-top: var(--payx-space-5);
+}
+
+.menu > .menu__list > .menu__list-item:first-child {
+  margin-top: 0;
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  color: var(--payx-ink);
+  font-weight: 600;
+  background: var(--payx-orange-wash);
+  box-shadow: inset 2px 0 0 var(--payx-orange);
+}
+
+.menu__caret::before,
+.menu__link--sublist-caret::after {
+  opacity: 0.55;
+}
+
+/* ========================================================================== */
+/* 5. Table of contents                                                       */
+/* ========================================================================== */
+
+.table-of-contents {
+  font-size: 0.8rem;
+  border-left: 1px solid var(--payx-hairline);
+  padding-left: var(--payx-space-4);
+}
+
+.table-of-contents__left-border {
+  border-left: none;
+}
+
+.table-of-contents__link {
+  color: var(--payx-ink-3);
+  display: block;
+  padding: 0.16rem 0;
+  line-height: 1.45;
+}
+
+.table-of-contents__link:hover {
+  color: var(--payx-ink);
+}
+
+.table-of-contents__link--active {
+  color: var(--payx-orange-ink);
+  font-weight: 500;
+}
+
+.theme-doc-toc-desktop {
+  max-height: calc(100vh - var(--ifm-navbar-height) - 3rem);
+}
+
+/* ========================================================================== */
+/* 6. API reference components                                                */
+/* ========================================================================== */
+
+/* --- HTTP method badges --- */
+
+.payx-method {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 4.1rem;
+  height: 1.5rem;
+  padding: 0 0.55rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  border: 1px solid currentColor;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.payx-method--get {
+  color: var(--payx-get);
+  background: var(--payx-get-wash);
+}
+
+.payx-method--post {
+  color: var(--payx-post);
+  background: var(--payx-post-wash);
+}
+
+.payx-method--put {
+  color: var(--payx-put);
+  background: var(--payx-put-wash);
+}
+
+.payx-method--del,
+.payx-method--delete {
+  color: var(--payx-del);
+  background: var(--payx-del-wash);
+}
+
+/* --- endpoint block --- */
+
+.payx-endpoint {
+  max-width: 100%;
+  margin: var(--payx-space-5) 0;
+  padding: var(--payx-space-4);
+  background: var(--payx-surface);
+  border: 1px solid var(--payx-hairline);
+  border-left: 3px solid var(--payx-orange);
+  border-radius: var(--payx-radius);
+}
+
+.payx-endpoint__label {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--payx-ink-3);
+  margin-bottom: var(--payx-space-2);
+}
+
+.payx-endpoint__label:not(:first-child) {
+  margin-top: var(--payx-space-4);
+}
+
+.payx-endpoint__row {
+  display: flex;
+  align-items: center;
+  gap: var(--payx-space-3);
+  flex-wrap: wrap;
+}
+
+.payx-endpoint__url {
+  flex: 1 1 20rem;
+  min-width: 0;
+  overflow-x: auto;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0.86rem;
+  color: var(--payx-ink);
+  white-space: pre;
+  scrollbar-width: thin;
+}
+
+/* --- documentation column width ------------------------------------------
+ *
+ * Infima caps `.container` at 1140px (1320px on xl), so on a 1600px+ display a
+ * doc page showed ~940px of table between two wide empty gutters while the
+ * table itself was compressed. These rules widen the container on large
+ * viewports only, and trim the TOC column from Infima's 25% to 20% with a
+ * floor so it stays readable. Scoped to `.docs-wrapper` so the landing page
+ * and its prose keep their existing measure.
+ */
+
+@media (min-width: 1416px) {
+  .docs-wrapper .container {
+    max-width: min(94vw, 1680px);
+  }
+}
+
+/* A doc page that suppresses its TOC (front matter `hide_table_of_contents`)
+ * renders a single column in the row. Detecting that shape with :has() gives
+ * those pages the full width without naming any page in CSS. Browsers without
+ * :has() simply keep the standard width. */
+@media (min-width: 997px) {
+  .docs-wrapper .container:has(.row > .col:only-child) {
+    max-width: min(98vw, 2100px);
+  }
+}
+
+@media (min-width: 997px) {
+  .docs-wrapper .row > .col--3 {
+    --ifm-col-width: 20%;
+    min-width: 200px;
+  }
+}
+
+/* --- content containment ------------------------------------------------
+ *
+ * Docusaurus lays the doc column and the right-hand TOC out as flex items in
+ * one row. A flex item defaults to `min-width: auto`, so it refuses to shrink
+ * below its content's minimum width: a wide table then pushes the doc column
+ * past its share of the row and renders underneath the TOC. `min-width: 0`
+ * lets the column shrink to its allotted width; anything wider than that has
+ * to scroll inside its own box (below).
+ */
+
+main .row > .col,
+.theme-doc-markdown,
+.theme-doc-markdown > .markdown,
+article {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* --- parameter tables ---
+ *
+ * Tables stay `display: block` at every width. As a block box the table can
+ * carry `overflow-x: auto`, so a table wider than the column scrolls inside
+ * itself instead of overflowing the column. (`overflow` has no effect on a
+ * `display: table` box, which is why the previous desktop override let wide
+ * tables slide under the TOC.) The per-column minimums below now drive that
+ * internal scroll rather than the width of the page.
+ */
+
+.markdown table {
+  display: block;
+  /* Sized to its content, not to the column: `width: 100%` forced the inner
+   * table box to the available width, so once the columns' minimums exceeded it
+   * the cells were squeezed below their content and long identifiers spilled
+   * over the next column. `max-content` lets the table take the width it needs
+   * and `max-width` hands the excess to this box's own horizontal scroll. */
+  width: max-content;
+  min-width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  margin-bottom: var(--payx-space-5);
+  scrollbar-width: thin;
+
+  /* Scroll cue: a soft shadow appears at whichever edge has more content off
+   * screen and disappears when that end is reached. Pure CSS — two fixed
+   * "cover" layers pinned to the scroll box and two scrolling "shadow" layers
+   * behind them, so it cannot desynchronise from the scroll position. */
+  background-image:
+    linear-gradient(to right, var(--ifm-background-color) 30%, rgba(0, 0, 0, 0)),
+    linear-gradient(to left, var(--ifm-background-color) 30%, rgba(0, 0, 0, 0)),
+    linear-gradient(to right, rgba(16, 21, 28, 0.13), rgba(0, 0, 0, 0) 18px),
+    linear-gradient(to left, rgba(16, 21, 28, 0.13), rgba(0, 0, 0, 0) 18px);
+  background-position: 0 0, 100% 0, 0 0, 100% 0;
+  background-repeat: no-repeat;
+  background-size: 32px 100%, 32px 100%, 18px 100%, 18px 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+
+/* cells paint over the scroll-cue gradients */
+.markdown table th,
+.markdown table td {
+  background-clip: padding-box;
+}
+
+.markdown table thead tr {
+  border-bottom: 1px solid var(--payx-hairline-strong);
+}
+
+.markdown table th {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--payx-ink-3);
+  text-align: left;
+  vertical-align: bottom;
+  white-space: nowrap;
+  background: var(--payx-surface);
+}
+
+.markdown table td {
+  vertical-align: top;
+  line-height: 1.55;
+}
+
+.markdown table td:first-child {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.82rem;
+  color: var(--payx-ink);
+  word-break: normal;
+  hyphens: none;
+}
+
+/* The parameter column was previously sticky while panning. It has been removed:
+ * with collapsed borders a sticky cell can fail to paint over the scrolling
+ * columns behind it, which is what made adjacent cell text appear to collide.
+ * Plain scrolling is predictable and needs no stacking context. */
+
+/* Contract field tables. Column widths are driven by minimums and by wrapping
+ * behaviour per column purpose — never by `max-width`, which table cells ignore.
+ * The identifier and type columns stay on one line so a name such as
+ * `sendClientTrxReference` or a type such as `Alphanumeric with hyphens` is
+ * never split or squeezed; when that makes the table wider than the content
+ * column, the table scrolls as a whole. */
+
+/* Parameter / Parameters */
+.markdown table td:nth-child(1) {
+  min-width: 9rem;
+  white-space: nowrap;
+}
+
+/* Input Type / Data Type — wraps between words but never inside one, so a value
+ * such as "Alphanumeric + special characters (Email format)" uses two lines
+ * instead of forcing a 26rem column. Its longest single word ("Alphanumeric")
+ * is 6.6rem, inside the 7.5rem minimum, so it can never overflow the cell. */
+.markdown table th:nth-child(2),
+.markdown table td:nth-child(2) {
+  min-width: 7.5rem;
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+/* Length */
+.markdown table th:nth-child(3),
+.markdown table td:nth-child(3) {
+  min-width: 5rem;
+  white-space: nowrap;
+}
+
+/* Requirement */
+.markdown table th:nth-child(4),
+.markdown table td:nth-child(4) {
+  min-width: 5rem;
+  white-space: nowrap;
+}
+
+/* Description — flexible, wraps naturally, takes whatever is left */
+.markdown table td:last-child {
+  min-width: 18rem;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* Search highlighting must not change column geometry */
+.markdown mark {
+  padding: 0;
+  border-radius: 2px;
+  background: var(--payx-orange-wash);
+  color: inherit;
+  box-decoration-break: clone;
+}
+
+.markdown table tr:hover td {
+  background: var(--payx-surface-2);
+}
+
+/* The API Index and the VA/validation requirement lists are separate table
+ * systems with their own tuned rules; the nowrap above must not reach them. */
+.markdown .payx-apitable td:nth-child(1),
+.markdown .payx-apitable td:nth-child(3),
+.markdown .payx-apitable td:nth-child(4),
+.markdown .payx-req table td {
+  white-space: normal;
+}
+
+/* --- code blocks --- */
+
+.theme-code-block {
+  max-width: 100%;
+  border: 1px solid var(--payx-hairline);
+  border-radius: var(--payx-radius);
+  box-shadow: none !important;
+  margin-bottom: var(--payx-space-5) !important;
+}
+
+.theme-code-block pre {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  max-height: 34rem;
+}
+
+.theme-code-block .clean-btn {
+  border-radius: var(--payx-radius-sm);
+}
+
+/* ========================================================================== */
+/* 7. Admonitions                                                             */
+/* ========================================================================== */
+
+.theme-admonition {
+  border-radius: var(--payx-radius);
+  border: 1px solid var(--payx-hairline);
+  border-left-width: 3px;
+  box-shadow: none;
+  font-size: 0.92rem;
+  padding: var(--payx-space-4);
+}
+
+.theme-admonition p:last-child {
+  margin-bottom: 0;
+}
+
+/* Caution admonitions: unmistakable, but they must not shout down the page */
+.theme-admonition-warning,
+.theme-admonition-caution {
+  background: var(--payx-orange-wash);
+  border-left-color: var(--payx-orange);
+}
+
+/* ========================================================================== */
+/* 8. Cards and integration flow                                              */
+/* ========================================================================== */
+
+.payx-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--payx-space-4);
+  margin: var(--payx-space-6) 0 var(--payx-space-7);
+}
+
+.payx-card {
+  position: relative;
+  padding: var(--payx-space-4);
+  background: var(--ifm-background-color);
+  border: 1px solid var(--payx-hairline);
+  border-radius: var(--payx-radius);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.payx-card:hover {
+  border-color: var(--payx-orange);
+  background: var(--payx-surface-2);
+}
+
+.payx-card__kicker {
+  display: block;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.67rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--payx-orange-ink);
+  margin-bottom: var(--payx-space-2);
+}
+
+.payx-card h3 {
+  font-size: 0.98rem;
+  margin: 0 0 var(--payx-space-2);
+}
+
+.payx-card h3 a {
+  color: var(--payx-ink);
+  text-decoration: none;
+}
+
+/* whole card is the hit area, while the anchor stays a real router link */
+.payx-card h3 a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--payx-radius);
+}
+
+.payx-card p {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--payx-ink-3);
+  margin: 0;
+}
+
+.payx-flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--payx-hairline);
+  margin: var(--payx-space-5) 0 var(--payx-space-6);
+}
+
+/* six-stage journey on the overview page */
+.payx-flow--six {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+@media (max-width: 1200px) and (min-width: 997px) {
+  .payx-flow--six {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: var(--payx-space-3);
+  }
+}
+
+.payx-flow__step {
+  position: relative;
+  padding: var(--payx-space-5) var(--payx-space-4) var(--payx-space-4) 0;
+}
+
+.payx-flow__step::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ifm-background-color);
+  border: 2px solid var(--payx-orange);
+}
+
+.payx-flow__index {
+  display: block;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--payx-ink-3);
+  margin-bottom: var(--payx-space-1);
+}
+
+.payx-flow__step p {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.payx-flow__step a {
+  color: var(--payx-ink);
+  text-decoration: none;
+}
+
+.payx-flow__step a:hover {
+  color: var(--payx-orange-ink);
+}
+
+/* ========================================================================== */
+/* 9. Landing page                                                            */
+/* ========================================================================== */
+
+.payx-hero {
+  padding: var(--payx-space-7) 0 var(--payx-space-6);
+  border-bottom: 1px solid var(--payx-hairline);
+  background: var(--payx-surface-2);
+}
+
+.payx-hero__logo {
+  display: block;
+  height: 46px;
+  width: auto;
+  max-width: 100%;
+  margin-bottom: var(--payx-space-5);
+}
+
+.payx-eyebrow {
+  display: inline-block;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--payx-orange-ink);
+}
+
+.payx-hero h1 {
+  font-size: clamp(1.9rem, 4.2vw, 2.75rem);
+  line-height: 1.12;
+  letter-spacing: -0.028em;
+  margin: var(--payx-space-3) 0 var(--payx-space-4);
+  max-width: 20ch;
+  color: var(--payx-ink);
+}
+
+.payx-hero p {
+  max-width: 60ch;
+  font-size: 1.02rem;
+  color: var(--payx-ink-3);
+}
+
+.payx-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--payx-space-3);
+  margin-top: var(--payx-space-5);
+}
+
+.payx-cta-row .button {
+  border-radius: var(--payx-radius-sm);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.payx-cta-row .button--primary {
+  background: #a35b02;
+  border-color: #a35b02;
+  color: #ffffff;
+}
+
+.payx-cta-row .button--primary:hover {
+  background: #7a4402;
+  border-color: #7a4402;
+  color: #ffffff;
+}
+
+.payx-section {
+  padding: var(--payx-space-7) 0;
+  border-bottom: 1px solid var(--payx-hairline);
+}
+
+.payx-section h2 {
+  font-size: 1.35rem;
+  letter-spacing: -0.015em;
+  margin: var(--payx-space-2) 0 var(--payx-space-5);
+  color: var(--payx-ink);
+}
+
+.payx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--payx-space-4);
+}
+
+.payx-grid .payx-card {
+  display: block;
+  color: inherit;
+  text-decoration: none !important;
+}
+
+.payx-grid .payx-card h3 {
+  margin: var(--payx-space-1) 0 var(--payx-space-2);
+  color: var(--payx-ink);
+}
+
+.payx-note {
+  border: 1px solid var(--payx-hairline);
+  border-left: 3px solid var(--payx-orange);
+  border-radius: var(--payx-radius);
+  background: var(--payx-surface);
+  padding: var(--payx-space-5);
+  font-size: 0.93rem;
+  max-width: 80ch;
+}
+
+.payx-note p:last-child {
+  margin-bottom: 0;
+}
+
+/* landing-page rail reuses the flow treatment */
+.payx-rail {
+  margin: var(--payx-space-7) 0 var(--payx-space-4);
+}
+
+.payx-rail__label {
+  margin-bottom: var(--payx-space-4);
+}
+
+.payx-rail__track {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--payx-hairline);
+}
+
+.payx-stop {
+  position: relative;
+  padding: var(--payx-space-5) var(--payx-space-4) var(--payx-space-5) 0;
+  text-decoration: none !important;
+  color: inherit;
+}
+
+.payx-stop::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ifm-background-color);
+  border: 2px solid var(--payx-orange);
+}
+
+.payx-stop:hover::before {
+  background: var(--payx-orange);
+}
+
+.payx-stop__index {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--payx-ink-3);
+}
+
+.payx-stop__name {
+  display: block;
+  font-weight: 600;
+  font-size: 1rem;
+  margin: var(--payx-space-1) 0 var(--payx-space-2);
+  color: var(--payx-ink);
+}
+
+.payx-stop:hover .payx-stop__name {
+  color: var(--payx-orange-ink);
+}
+
+.payx-stop__note {
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--payx-ink-3);
+  margin: 0;
+}
+
+/* ========================================================================== */
+/* 10. Responsive                                                             */
+/* ========================================================================== */
+
+@media (max-width: 996px) {
+  .payx-flow,
+  .payx-flow--six,
+  .payx-rail__track {
+    grid-template-columns: 1fr;
+    border-top: none;
+    border-left: 1px solid var(--payx-hairline);
+  }
+
+  .payx-flow__step,
+  .payx-stop {
+    padding: var(--payx-space-3) 0 var(--payx-space-3) var(--payx-space-4);
+  }
+
+  .payx-flow__step::before,
+  .payx-stop::before {
+    top: 1.15rem;
+    left: -5px;
+  }
+
+  .payx-hero {
+    padding: var(--payx-space-6) 0 var(--payx-space-5);
+  }
+
+  article h1 {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .navbar__logo,
+  .navbar__logo img {
+    height: 26px;
+  }
+
+  .navbar__title {
+    display: none;
+  }
+
+  .payx-hero__logo {
+    height: 34px;
+  }
+
+  .payx-endpoint {
+    padding: var(--payx-space-3);
+  }
+
+  .markdown table {
+    font-size: 0.82rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+
+/* ========================================================================== */
+/* 11. Data grids, API index, journey, checklist                              */
+/* ========================================================================== */
+
+/* --- validation requirement lists ---------------------------------------
+ *
+ * Country and Currency validations used to render as 15–18 column matrices in
+ * a horizontally scrolling grid. That grid CSS (.payx-datagrid, sticky first
+ * and second columns, fixed 6.5rem identifier widths, viewport-height
+ * container, edge shadows) has been removed: the generator now emits one
+ * expandable entry per row, so there is nothing wide left to scroll.
+ *
+ * Each entry is a native <details>, which brings keyboard support, focus
+ * handling and open/closed state announcement for free.
+ */
+
+.payx-reqs {
+  border: 1px solid var(--payx-hairline);
+  border-radius: var(--payx-radius);
+  overflow: hidden;
+  margin-bottom: var(--payx-space-5);
+}
+
+.payx-reqs__group {
+  margin: 0;
+  padding: var(--payx-space-2) var(--payx-space-4);
+  background: var(--payx-surface);
+  border-bottom: 1px solid var(--payx-hairline);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--payx-ink-3);
+}
+
+.payx-req {
+  border-bottom: 1px solid var(--payx-hairline);
+  background: var(--ifm-background-color);
+}
+
+.payx-req:last-child {
+  border-bottom: none;
+}
+
+.payx-req > summary {
+  display: flex;
+  align-items: center;
+  gap: var(--payx-space-3);
+  padding: 0.6rem var(--payx-space-4);
+  cursor: pointer;
+  list-style: none;
+  transition: background 0.12s ease;
+}
+
+.payx-req > summary::-webkit-details-marker {
+  display: none;
+}
+
+.payx-req > summary:hover {
+  background: var(--payx-surface-2);
+}
+
+.payx-req > summary:focus-visible {
+  outline: 2px solid var(--payx-orange);
+  outline-offset: -2px;
+}
+
+.payx-req__code {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--payx-ink);
+  min-width: 5rem;
+}
+
+.payx-req__rail {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--payx-ink-3);
+  border: 1px solid var(--payx-hairline-strong);
+  border-radius: 3px;
+  padding: 0.1rem 0.4rem;
+}
+
+/* the caret is drawn from the open/closed state, not from colour alone */
+.payx-req__cta {
+  margin-left: auto;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--payx-orange-ink);
+  white-space: nowrap;
+}
+
+.payx-req__cta::after {
+  content: ' \25BE';
+  display: inline-block;
+  transition: transform 0.12s ease;
+}
+
+.payx-req[open] > summary .payx-req__cta::after {
+  transform: rotate(180deg);
+}
+
+.payx-req[open] > summary {
+  background: var(--payx-orange-wash);
+  border-bottom: 1px solid var(--payx-hairline);
+}
+
+.payx-req > *:not(summary) {
+  padding: 0 var(--payx-space-4);
+}
+
+.payx-req table {
+  margin: var(--payx-space-3) 0;
+  width: 100%;
+  max-width: 46rem;
+}
+
+.payx-req table td:first-child {
+  min-width: 14rem;
+  max-width: 22rem;
+  position: static;      /* no sticky column needed at two columns */
+  border-right: none;
+}
+
+.payx-req table td:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+@media (max-width: 700px) {
+  .payx-req > summary {
+    flex-wrap: wrap;
+    gap: var(--payx-space-2);
+  }
+
+  .payx-req__cta {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+
+  /* two columns become label-above-value on a phone */
+  .payx-req table,
+  .payx-req table tbody,
+  .payx-req table tr,
+  .payx-req table td {
+    display: block;
+    width: auto;
+  }
+
+  .payx-req table thead {
+    display: none;
+  }
+
+  .payx-req table tr {
+    padding: var(--payx-space-2) 0;
+    border-bottom: 1px solid var(--payx-hairline);
+  }
+
+  .payx-req table td {
+    border: none;
+    padding: 0.1rem 0;
+  }
+
+  .payx-req table td:first-child {
+    min-width: 0;
+    max-width: none;
+    color: var(--payx-ink-3);
+  }
+}
+
+/* --- API index --- */
+
+.payx-apitable {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--payx-hairline);
+  border-radius: var(--payx-radius);
+  margin-bottom: var(--payx-space-5);
+  scrollbar-width: thin;
+}
+
+.markdown .payx-apitable table {
+  display: table;
+  table-layout: auto;          /* auto, so the min-widths below are honoured */
+  width: 100%;
+  min-width: 70rem;            /* sum of the column minimums; the container scrolls below this */
+  margin: 0;
+  border: none;
+}
+
+.markdown .payx-apitable th,
+.markdown .payx-apitable td {
+  vertical-align: top;
+  /* nothing in this table breaks inside a word unless a column opts in */
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+/* API — normal word wrapping only: "Customer Registration" may wrap between the
+   two words, "Authentication" is never split inside the word. */
+.markdown .payx-apitable th:nth-child(1),
+.markdown .payx-apitable td:nth-child(1) {
+  min-width: 9.5rem;
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--payx-ink);
+  max-width: none;
+  position: static;   /* the generic sticky first column is not wanted here */
+  border-right: none;
+}
+
+/* Method — shrink-to-fit, always one line */
+.markdown .payx-apitable th:nth-child(2),
+.markdown .payx-apitable td:nth-child(2) {
+  width: 1%;
+  min-width: 4.5rem;
+  white-space: nowrap;
+}
+
+.markdown .payx-apitable td:nth-child(2) code {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: keep-all;
+}
+
+/* Purpose — the flexible descriptive column */
+.markdown .payx-apitable th:nth-child(3),
+.markdown .payx-apitable td:nth-child(3) {
+  min-width: 17rem;
+}
+
+/* Integration stage — phrase wrapping, with room for "Pricing / pre-registration" */
+.markdown .payx-apitable th:nth-child(4),
+.markdown .payx-apitable td:nth-child(4) {
+  min-width: 9.5rem;
+  white-space: normal;
+}
+
+/* Endpoint — flexible and the only column allowed to break inside a token */
+.markdown .payx-apitable th:nth-child(5),
+.markdown .payx-apitable td:nth-child(5) {
+  min-width: 17rem;
+}
+
+.markdown .payx-apitable td:nth-child(5) code {
+  display: block;
+  white-space: normal;
+  overflow-wrap: break-word;   /* breaks after / and - first; no per-cell scrollbar */
+  word-break: normal;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+/* Page — shrink-to-fit */
+.markdown .payx-apitable th:nth-child(6),
+.markdown .payx-apitable td:nth-child(6) {
+  width: 1%;
+  min-width: 4.5rem;
+  white-space: nowrap;
+}
+
+/* --- integration journey --- */
+
+.payx-journey {
+  margin: var(--payx-space-5) 0 var(--payx-space-6);
+  border-left: 1px solid var(--payx-hairline);
+  padding-left: var(--payx-space-5);
+}
+
+.payx-journey__step {
+  position: relative;
+  padding: 0 0 var(--payx-space-5);
+}
+
+.payx-journey__step::before {
+  content: '';
+  position: absolute;
+  top: 0.55rem;
+  left: calc(-1 * var(--payx-space-5) - 5px);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ifm-background-color);
+  border: 2px solid var(--payx-orange);
+}
+
+.payx-journey__kind {
+  display: inline-block;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.63rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--payx-orange-ink);
+  margin-left: var(--payx-space-3);
+}
+
+.payx-journey__index {
+  display: block;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--payx-ink-3);
+}
+
+.payx-journey__step > p {
+  margin: 0 0 var(--payx-space-2);
+  max-width: 74ch;
+}
+
+.payx-journey__step > p:first-of-type strong {
+  font-size: 1rem;
+}
+
+.payx-branches {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--payx-space-3);
+  margin-top: var(--payx-space-3);
+}
+
+.payx-branch {
+  border: 1px solid var(--payx-hairline);
+  border-radius: var(--payx-radius);
+  background: var(--payx-surface-2);
+  padding: var(--payx-space-3) var(--payx-space-4);
+}
+
+.payx-branch__label {
+  display: block;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.67rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--payx-orange-ink);
+  margin-bottom: var(--payx-space-2);
+}
+
+.payx-branch p {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+/* --- payout prerequisite checklist --- */
+
+.payx-checklist {
+  border: 1px solid var(--payx-hairline);
+  border-radius: var(--payx-radius);
+  background: var(--payx-surface-2);
+  padding: var(--payx-space-4) var(--payx-space-5);
+  margin-bottom: var(--payx-space-5);
+}
+
+.payx-checklist ol {
+  margin: 0;
+  padding-left: 1.3rem;
+}
+
+.payx-checklist li {
+  padding: 0.2rem 0;
+  font-size: 0.92rem;
+  max-width: 74ch;
+}
+
+/* --- card variants --- */
+
+.payx-cards--two {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.payx-cards--three {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.payx-card p {
+  margin: 0 0 var(--payx-space-2);
+}
+
+.payx-card p:last-child {
+  margin-bottom: 0;
+}
+
+.payx-card--doc p {
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+/* tighter rhythm between the overview's stacked sections */
+.markdown .payx-cards + h2,
+.markdown .payx-flow + p,
+.markdown .payx-journey + h2 {
+  margin-top: var(--payx-space-5);
+}
+
+@media (max-width: 700px) {
+  .payx-journey {
+    padding-left: var(--payx-space-4);
+  }
+
+  .payx-journey__step::before {
+    left: calc(-1 * var(--payx-space-4) - 5px);
+  }
+
+  .payx-checklist {
+    padding: var(--payx-space-3) var(--payx-space-4);
+  }
+}
+
+
+/* --- homepage payout journey stages --- */
+
+.payx-journey__lede {
+  max-width: 72ch;
+  font-size: 0.95rem;
+  color: var(--payx-ink-3);
+  margin-bottom: var(--payx-space-5);
+}
+
+.payx-stages {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  background: var(--payx-hairline);
+  border: 1px solid var(--payx-hairline);
+  border-radius: var(--payx-radius);
+  overflow: hidden;
+}
+
+.payx-stage {
+  position: relative;
+  background: var(--ifm-background-color);
+  padding: var(--payx-space-4);
+}
+
+.payx-stage__index {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--payx-ink-3);
+}
+
+.payx-stage__kind {
+  display: block;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.63rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--payx-orange-ink);
+  margin: var(--payx-space-1) 0 var(--payx-space-2);
+}
+
+.payx-stage__name {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--payx-ink);
+  text-decoration: none !important;
+  margin-bottom: var(--payx-space-2);
+}
+
+.payx-stage__name::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.payx-stage:hover {
+  background: var(--payx-surface-2);
+}
+
+.payx-stage:hover .payx-stage__name {
+  color: var(--payx-orange-ink);
+}
+
+.payx-stage__note {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--payx-ink-3);
+  margin: 0;
+}
+
+.payx-journey__more {
+  font-size: 0.92rem;
+  margin-top: var(--payx-space-4);
+}
+
+/* documentation directory cards list tightly */
+.payx-card ul {
+  margin: 0;
+  padding-left: 1.05rem;
+  font-size: 0.9rem;
+}
+
+.payx-card li {
+  padding: 0.12rem 0;
+}
