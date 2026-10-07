@@ -12,33 +12,41 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
  * performance figures, SLAs or environment URLs have been added.
  */
 
-// PAYX names four APIs as its call sequence and states that the remaining APIs
-// "can be called based on the need" — apisequence.md.
-const CORE = [
+/*
+ * Information architecture: Choose where to go -> What it takes to complete a payout
+ * -> Supporting capabilities -> What else you can integrate.
+ *
+ * PAYX lists eight steps in apisequence.md and then narrows them itself: "the API
+ * call sequence is limited to the Login API, Quotation API, Payout API, and
+ * Transaction Enquiry API and the remaining APIs can be called based on the need."
+ * That narrowing is the classification used below. Do not reintroduce a prominent
+ * "Core API Call Sequence" or "Core flow" section here.
+ */
+const PAYOUT_JOURNEY = [
   {
     index: '01',
-    kind: 'Core transaction API',
+    role: 'Authenticate',
     name: 'Authentication',
-    note: 'Authenticate and obtain the access token for subsequent calls.',
+    note: 'Obtain the access token used by every subsequent PAYX call.',
     to: '/docs/authentication/authentication',
   },
   {
     index: '02',
-    kind: 'Core transaction API',
+    role: 'Price the transfer',
     name: 'Quotation',
-    note: 'Fetch the exchange rate and charges before initiating a payout.',
+    note: 'Fetch the exchange rate and charges, and the forexQuoteId the payout must quote.',
     to: '/docs/quotation/quotation',
   },
   {
     index: '03',
-    kind: 'Core transaction API',
+    role: 'Submit the payout',
     name: 'Payout',
-    note: 'Initiate the fund transfer based on the selected quotation and beneficiary — FIAT, Crypto or WPT.',
+    note: 'Initiate the fund transfer. Which contract you send depends on the rail — FIAT, Crypto or WPT.',
     to: '/docs/payouts/overview',
   },
   {
     index: '04',
-    kind: 'Core transaction API',
+    role: 'Confirm the outcome',
     name: 'Transaction Enquiry',
     note: 'Check the status of a previously initiated payout.',
     to: '/docs/enquiry/transaction-enquiry',
@@ -49,7 +57,7 @@ const ENTRY_POINTS = [
   {
     kicker: 'Orientation',
     title: 'Integration journey',
-    body: 'The call sequence PAYX documents, split into the core flow and the supporting APIs called on need.',
+    body: 'What it takes to complete a payout, the supporting APIs called on need, and what else you can integrate.',
     to: '/docs/getting-started/integration-journey',
   },
   {
@@ -88,7 +96,8 @@ const RAILS = [
   },
 ];
 
-const CAPABILITIES = [
+// Called based on the need of the transaction, the rail and the customer.
+const SUPPORTING = [
   {
     kicker: '16 GET operations',
     title: 'Master / reference APIs',
@@ -96,22 +105,50 @@ const CAPABILITIES = [
     to: '/docs/master-apis',
   },
   {
+    kicker: 'FIAT',
+    title: 'Bank List',
+    body: 'Bank details and related parameters required by a specific correspondent, based on the receiver code.',
+    to: '/docs/master-apis/bank-list',
+  },
+  {
+    kicker: 'Crypto',
+    title: 'Crypto network and wallet validation',
+    body: 'Fetch the network list for crypto payments, and validate a crypto wallet address before submitting a payout.',
+    to: '/docs/master-apis/crypto-network',
+  },
+  {
     kicker: 'Customers',
     title: 'Customer registration',
-    body: 'Register Business or Individual customers ahead of a payout, or on the fly during the payout request itself.',
+    body: 'Register Business or Individual customers ahead of a payout, or create the customer during the payout request itself.',
     to: '/docs/customers/customer-registration',
   },
   {
     kicker: 'Documents',
     title: 'Document Upload',
-    body: 'Upload customer ID proof documents and reference them from a payout by docReferenceNumber.',
+    body: 'Upload customer ID proofs and invoices, and reference them from a payout by docReferenceNumber.',
     to: '/docs/documents/document-upload',
+  },
+];
+
+// Documented PAYX capabilities that are not required to understand the payout journey.
+const ADDITIONAL = [
+  {
+    kicker: 'Wallet',
+    title: 'Balance Enquiry',
+    body: 'Retrieve the current wallet or account balance. PAYX lists this outside the four-call sequence.',
+    to: '/docs/enquiry/balance-enquiry',
   },
   {
     kicker: 'Conditional requirements',
     title: 'Validation rules',
     body: 'Which conditional payout fields a correspondent requires, by currency and rail and by destination country.',
     to: '/docs/validation/field-requirement-rules',
+  },
+  {
+    kicker: 'Responses',
+    title: 'Status and response codes',
+    body: 'The transaction statuses a payout moves through and the response envelope every PAYX API returns.',
+    to: '/docs/status-and-errors',
   },
 ];
 
@@ -174,23 +211,23 @@ function EntryPoints() {
   );
 }
 
-function CoreFlow() {
+function PayoutJourney() {
   return (
     <section className="payx-section">
       <div className="container">
-        <span className="payx-eyebrow">Core flow</span>
-        <h2>The four APIs PAYX names as the sequence</h2>
+        <span className="payx-eyebrow">The journey</span>
+        <h2>What it takes to complete a payout</h2>
         <p className="payx-journey__lede">
-          PAYX documents an eight-step ordering, then states that the sequence is
-          limited to the Login, Quotation, Payout and Transaction Enquiry APIs and
-          that the remaining APIs can be called based on the need. Those four are
-          below; everything else is supporting.
+          To complete a payout, an integration authenticates, requests a quotation,
+          submits the payout and then confirms the outcome through transaction
+          enquiry. Supporting APIs are used where the transaction, the rail or the
+          customer requires them.
         </p>
         <ol className="payx-stages">
-          {CORE.map((stage) => (
+          {PAYOUT_JOURNEY.map((stage) => (
             <li key={stage.index} className="payx-stage">
               <span className="payx-stage__index">{stage.index}</span>
-              <span className="payx-stage__kind">{stage.kind}</span>
+              <span className="payx-stage__kind">{stage.role}</span>
               <Link className="payx-stage__name" to={stage.to}>
                 {stage.name}
               </Link>
@@ -202,7 +239,8 @@ function CoreFlow() {
           <Link to="/docs/getting-started/integration-journey">
             See the full integration journey
           </Link>{' '}
-          for the supporting APIs and the data carried between calls.
+          for the per-rail requirements, how the customer is identified, and the data
+          carried between the calls.
         </p>
       </div>
     </section>
@@ -213,7 +251,7 @@ function Rails() {
   return (
     <section className="payx-section">
       <div className="container">
-        <span className="payx-eyebrow">Payouts</span>
+        <span className="payx-eyebrow">The payout step</span>
         <h2>Three payout rails, three contracts</h2>
         <p className="payx-journey__lede">
           FIAT, Crypto and WPT payouts are submitted to the same endpoint and share
@@ -234,16 +272,40 @@ function Rails() {
   );
 }
 
-function Capabilities() {
+function SupportingCapabilities() {
   return (
     <section className="payx-section">
       <div className="container">
-        <span className="payx-eyebrow">Supporting capabilities</span>
+        <span className="payx-eyebrow">Called on need</span>
+        <h2>Supporting capabilities</h2>
+        <p className="payx-journey__lede">
+          APIs that support the payout journey without being part of the four calls
+          that complete it. PAYX describes the Master APIs as subject to requirement.
+        </p>
+        <div className="payx-grid">
+          {SUPPORTING.map((c) => (
+            <Link key={c.title} className="payx-card" to={c.to}>
+              <span className="payx-card__kicker">{c.kicker}</span>
+              <h3>{c.title}</h3>
+              <p>{c.body}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Additional() {
+  return (
+    <section className="payx-section">
+      <div className="container">
+        <span className="payx-eyebrow">Beyond the payout journey</span>
         <h2>What else you can integrate</h2>
         <div className="payx-grid">
-          {CAPABILITIES.map((c) => (
+          {ADDITIONAL.map((c) => (
             <Link key={c.title} className="payx-card" to={c.to}>
-              <span className="payx-eyebrow">{c.kicker}</span>
+              <span className="payx-card__kicker">{c.kicker}</span>
               <h3>{c.title}</h3>
               <p>{c.body}</p>
             </Link>
@@ -260,10 +322,13 @@ export default function Home() {
       title="PAYX Developer Portal"
       description="Developer documentation for the PAYX (Pay CrossBorder) cross-border payment APIs: authentication, quotation, FIAT/Crypto/WPT payouts, customer registration, master data and validation rules.">
       <Hero />
+      {/* Choose where to go -> What it takes to complete a payout ->
+          Supporting capabilities -> What else you can integrate */}
       <EntryPoints />
-      <CoreFlow />
+      <PayoutJourney />
       <Rails />
-      <Capabilities />
+      <SupportingCapabilities />
+      <Additional />
     </Layout>
   );
 }

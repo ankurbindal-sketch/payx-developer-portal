@@ -26,7 +26,7 @@ Our platform is designed to simplify global payouts for sectors that traditional
 The APIs described on this forum are limited to Financial Institution Customer.
 
 
-## Where to start
+## Choose where to go
 
 <div className="payx-cards">
 
@@ -35,7 +35,7 @@ The APIs described on this forum are limited to Financial Institution Customer.
 
 ### [Integration journey](/docs/getting-started/integration-journey)
 
-The call sequence PAYX documents, and which APIs are core versus need-based.
+What it takes to complete a payout, the supporting APIs called on need, and what else you can integrate.
 
 </div>
 
@@ -54,6 +54,15 @@ Every public PAYX API with its method, purpose and endpoint.
 ### [Payouts](/docs/payouts/overview)
 
 FIAT, Crypto and WPT payouts — three separate contracts on one endpoint.
+
+</div>
+
+<div className="payx-card">
+<span className="payx-card__kicker">Conventions</span>
+
+### [How to read this reference](/docs/getting-started/conventions)
+
+Requirement flags, endpoint path conventions, the response envelope and the code systems PAYX uses.
 
 </div>
 
